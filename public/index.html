@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Website Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Website Generator</h1>
+  <form id="generatorForm">
+    <label>Judul Website: <input type="text" name="title" required></label><br>
+    <label>Deskripsi: <input type="text" name="desc" required></label><br>
+    <label>Nama Anda: <input type="text" name="owner" required></label><br>
+    <label>Warna Dominan: <input type="color" name="color" value="#007BFF"></label><br>
+    <button type="submit">Generate & Download</button>
+  </form>
+
+  <script>
+    document.getElementById("generatorForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const res = await fetch('/generate', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+      });
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'website.zip';
+      a.click();
+    });
+  </script>
+</body>
+</html>
